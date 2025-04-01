@@ -97,8 +97,14 @@ public class Game {
         }
     }
 
-    public void switchTurn() {
+    public void switchTurn() 
+    {
+    currentPlayer = (currentPlayer == player1) ? player2 : player1;
+    if (currentPlayer.hasLostAllPieces()) 
+    {
+        // Forfeit turn if no pieces
         currentPlayer = (currentPlayer == player1) ? player2 : player1;
+    }
     }
 
     public boolean movePiece(Piece piece, Tile destination) {
@@ -120,6 +126,9 @@ public class Game {
                     opponent.setCaptured(true);
                     destination.setCurrPiece(null);
                 } else {
+                    // Attacker dies
+                    piece.setCaptured(true);
+                    piece.getPosition().setCurrPiece(null);
                     return false;
                 }
             }
