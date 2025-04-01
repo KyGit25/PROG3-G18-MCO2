@@ -6,8 +6,8 @@ import model.tiles.Tile;
 import model.tiles.HomeBase;
 
 public class Rat extends Piece implements Swimming {
-    public Rat(Tile pos) {
-        super(pos);
+    public Rat(Tile pos, String owner) {
+        super(pos, owner);
     }
 
     @Override
