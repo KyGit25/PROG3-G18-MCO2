@@ -5,10 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import controller.BoardController;
 import model.Board;
-import model.tiles.Tile;
-import model.tiles.Lake;
-import model.tiles.Trap;
-import model.tiles.HomeBase;
+import model.tiles.*;
 import model.pieces.Piece;
 
 public class BoardView {
