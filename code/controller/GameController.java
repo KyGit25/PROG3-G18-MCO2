@@ -4,7 +4,6 @@ import java.util.List;
 import javax.swing.Timer;
 import model.Game;
 import view.GameView;
-import view.BoardView;
 import model.GameState;
 import model.Player;
 
@@ -12,12 +11,12 @@ public class GameController {
     private Game game;
     private GameView gameView;
     private MenuController menuController;
+    private BoardController boardController;
     private GameState gameState;
     
     private String player1Piece;
     private String player2Piece;
     private boolean selectionComplete;
-    private BoardView boardView;  // Keep track of current board view
 
     public GameController() {
         this.menuController = new MenuController(this);
@@ -47,18 +46,13 @@ public class GameController {
     public void onPieceSelected(String piece, boolean currentTurn) {
         if (player1Piece == null) {
             player1Piece = piece;
+            gameView.disablePieceButton(piece);
+            gameView.updateStatus("Player 2: Select your piece");
         } else if (player2Piece == null) {
             player2Piece = piece;
-            selectionComplete = true;
-        }
-        
-        gameView.disablePieceButton(piece);
-
-        if (selectionComplete) {
+            gameView.disablePieceButton(piece);
             gameView.disableAllButtons();
             handleSelectionComplete();
-        } else {
-            gameView.updateStatus("Player 2: Select your piece");
         }
     }
 
@@ -70,20 +64,21 @@ public class GameController {
 
         String message = String.format("Player 1 selected %s, Player 2 selected %s. %s goes first!", 
             player1Piece, player2Piece, firstPlayer.getName());
-        gameView.updateStatus(message);
+            gameView.updateStatus(message);
         
         Timer timer = new Timer(3000, e -> {
             gameView.dispose();
-            boardView = new BoardView(this, game.getBoard());
-            boardView.setVisible(true);
+            boardController = new BoardController(this, game);
+            boardController.showBoard();
         });
         timer.setRepeats(false);
         timer.start();
     }
 
     public void restartGame() {
-        if (boardView != null) {
-            boardView.dispose();
+        if (boardController != null) {
+            boardController.disposeBoard();
+            boardController = null;
         }
         
         game = new Game();
@@ -104,8 +99,9 @@ public class GameController {
             gameView.dispose();
         }
         
-        if (boardView != null) {
-            boardView.dispose();
+        if (boardController != null) {
+            boardController.disposeBoard();
+            boardController = null;
         }
         
         menuController.setMenuVisible(true);
