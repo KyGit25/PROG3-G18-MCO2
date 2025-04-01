@@ -1,30 +1,12 @@
 package model.pieces;
 
+import model.tiles.*;
 import model.interfaces.Swimming;
-import model.tiles.Lake;
-import model.tiles.Tile;
-import model.tiles.HomeBase;
 
 public class Rat extends Piece implements Swimming {
-    public Rat(Tile pos, String owner) {
-        super(pos, owner);
-    }
 
-    @Override
-    public boolean canCapture(Piece piece) {
-        // Rat can capture elephant and other rats
-        if (piece instanceof Elephant) return true;
-        return this.getStrength() >= piece.getStrength();
-    }
-
-    @Override
-    public boolean canMove(Tile destination) {
-        // Can move on land or swim in lakes
-        // Cannot move into own home base
-        if (destination instanceof HomeBase && ((HomeBase) destination).getOwner().equals(this.getOwner())) {
-            return false;
-        }
-        return true;
+    public Rat(Tile pos) {
+        super(pos);
     }
 
     @Override
@@ -33,9 +15,43 @@ public class Rat extends Piece implements Swimming {
     }
 
     @Override
+    public boolean canCapture(Piece target) {
+        if (target == null || target.getOwner().equals(this.owner)) return false;
+
+        Tile myTile = this.getPosition();
+        Tile theirTile = target.getPosition();
+
+        // Can't capture anything from lake except another rat
+        if (myTile instanceof Lake) {
+            return target instanceof Rat && theirTile instanceof Lake;
+        }
+
+        // Rat can't capture elephant if it's in lake and elephant is on land
+        if (target instanceof Elephant && theirTile instanceof Land) {
+            return !(myTile instanceof Lake);
+        }
+
+        // Trap exception: anyone can capture enemies on traps
+        if (theirTile instanceof Trap &&
+            !((Trap) theirTile).getOwner().equals(this.owner)) {
+            return true;
+        }
+
+        return this.getStrength() >= target.getStrength();
+    }
+
+    @Override
+    public boolean canMove(Tile destination) {
+        if (destination.isOccupied() && destination.getCurrPiece().getOwner().equals(this.owner)) return false;
+
+        int dx = Math.abs(pos.getRow() - destination.getRow());
+        int dy = Math.abs(pos.getCol() - destination.getCol());
+
+        return (dx + dy == 1);
+    }
+
+    @Override
     public Tile swim(Tile destination) {
-        // Implementation for swimming in lakes
-        // Can only move one square at a time in lakes
-        return destination;
+        return (destination instanceof Lake) ? destination : null;
     }
 }
