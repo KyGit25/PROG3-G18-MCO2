@@ -1,7 +1,11 @@
 package model;
 
-import model.board.Board;
-
+import model.Board;
+import model.pieces.*;
+import model.tiles.Tile;
+import model.tiles.HomeBase;
+import model.interfaces.Leaping;
+import model.interfaces.Swimming;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;

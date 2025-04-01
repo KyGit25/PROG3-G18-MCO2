@@ -1,5 +1,13 @@
+package controller;
+
 import java.util.List;
 import javax.swing.Timer;
+import model.Game;
+import model.GameState;
+import model.Player;
+import view.GameView;
+import view.MenuView;
+import view.BoardView;
 
 public class GameController {
     private Game game;
@@ -47,7 +55,8 @@ public class GameController {
             gameState.getPlayer2Piece()
         );
 
-        String message = String.format("Player 1 selected %s, Player 2 selected %s. %s goes first!", gameState.getPlayer1Piece(), gameState.getPlayer2Piece(), firstPlayer.getName());
+        String message = String.format("Player 1 selected %s, Player 2 selected %s. %s goes first!", 
+            gameState.getPlayer1Piece(), gameState.getPlayer2Piece(), firstPlayer.getName());
         gameView.updateStatus(message);
         
         Timer timer = new Timer(3000, e -> {

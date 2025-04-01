@@ -1,6 +1,15 @@
+package view;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import controller.GameController;
+import model.Board;
+import model.tiles.Tile;
+import model.tiles.Lake;
+import model.tiles.Trap;
+import model.tiles.HomeBase;
+import model.pieces.Piece;
 
 public class BoardView {
     private static final int TILE_SIZE = 80;
