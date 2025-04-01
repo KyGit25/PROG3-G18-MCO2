@@ -6,8 +6,8 @@ import model.tiles.Tile;
 import model.tiles.HomeBase;
 
 public class Lion extends Piece implements Leaping {
-    public Lion(Tile pos) {
-        super(pos);
+    public Lion(Tile pos, String owner) {
+        super(pos, owner);
     }
 
     @Override
