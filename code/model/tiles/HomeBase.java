@@ -11,9 +11,4 @@ public class HomeBase extends Tile {
     public String getOwner() {
         return owner;
     }
-
-    @Override
-    public void render() {
-        // Render logic customize in view
-    }
 }
