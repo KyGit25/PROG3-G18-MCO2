@@ -155,12 +155,19 @@ public class Game {
         if (destination.isOccupied()) {
             Piece target = destination.getCurrPiece();
             
-            // Error handling for Rat capture
-            if (target instanceof Rat && target.getPosition() instanceof Lake && !(piece instanceof Rat)) {
-                throw new RuntimeException("Cannot capture a Rat in the lake!");
+            // Check for friendly piece
+            if (target.getOwner().equals(piece.getOwner())) {
+                throw new RuntimeException("Cannot capture your own piece!");
             }
-            if (piece instanceof Rat && piece.getPosition() instanceof Lake && target instanceof Elephant) {
-                throw new RuntimeException("Rat in lake cannot capture Elephant on land!");
+            
+            if (target.getPosition() instanceof Lake && !(piece instanceof Rat)) { // target is on lake and piece is not a rat
+                throw new RuntimeException("Only rats can capture pieces on the lake!");
+            }
+            
+            if (piece.getPosition() instanceof Lake && piece instanceof Rat) { // piece is a rat and on lake
+                if (!(target instanceof Rat && target.getPosition() instanceof Lake)) { // target is not a rat or not on lake
+                    throw new RuntimeException("Rat in lake can only capture other rats in lake!");
+                }
             }
             
             if (piece.canCapture(target)) {
