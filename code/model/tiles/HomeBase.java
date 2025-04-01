@@ -1,20 +1,19 @@
 package model.tiles;
 
 public class HomeBase extends Tile {
-    private String owner; // "Blue" or "Green"
+    private String owner;
 
     public HomeBase(int row, int col, String owner) {
         super(row, col);
         this.owner = owner;
     }
 
-    @Override
-    public void render() {
-        // Rendering logic for home base tile
+    public String getOwner() {
+        return owner;
     }
 
-    public String getOwner() 
-    {
-        return owner;
+    @Override
+    public void render() {
+        // Render logic customize in view
     }
 }
