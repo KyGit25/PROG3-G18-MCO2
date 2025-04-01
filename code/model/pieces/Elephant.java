@@ -1,6 +1,7 @@
 package model.pieces;
 
 import model.tiles.Tile;
+import model.tiles.HomeBase;
 
 public class Elephant extends Piece {
     public Elephant(Tile pos) {

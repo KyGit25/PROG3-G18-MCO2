@@ -3,6 +3,7 @@ package model.pieces;
 import model.interfaces.Swimming;
 import model.tiles.Lake;
 import model.tiles.Tile;
+import model.tiles.HomeBase;
 
 public class Rat extends Piece implements Swimming {
     public Rat(Tile pos) {

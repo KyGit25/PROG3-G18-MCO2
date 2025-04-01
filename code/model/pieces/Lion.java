@@ -3,6 +3,7 @@ package model.pieces;
 import model.interfaces.Leaping;
 import model.tiles.Lake;
 import model.tiles.Tile;
+import model.tiles.HomeBase;
 
 public class Lion extends Piece implements Leaping {
     public Lion(Tile pos) {

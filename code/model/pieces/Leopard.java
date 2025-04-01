@@ -1,6 +1,7 @@
 package model.pieces;
 
 import model.tiles.Tile;
+import model.tiles.HomeBase;
 
 public class Leopard extends Piece {
     public Leopard(Tile pos) {
