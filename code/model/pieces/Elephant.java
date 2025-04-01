@@ -17,10 +17,10 @@ public class Elephant extends Piece {
 
     @Override
     public boolean canMove(Tile destination) {
-        // Standard orthogonal movement (1 square)
-        int rowDiff = Math.abs(destination.getRow() - pos.getRow());
-        int colDiff = Math.abs(destination.getCol() - pos.getCol());
-        return (rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1);
+        if (destination instanceof HomeBase && ((HomeBase) destination).getOwner().equals(this.getOwner())) {
+            return false;
+        }
+        return true;
     }
 
     @Override
