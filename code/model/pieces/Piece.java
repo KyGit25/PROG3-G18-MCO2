@@ -5,6 +5,7 @@ import model.tiles.Tile;
 public abstract class Piece {
     protected Tile pos;
     protected boolean isCaptured;
+    protected String owner;
 
     public Piece(Tile pos) {
         this.pos = pos;
@@ -16,6 +17,18 @@ public abstract class Piece {
 
     public boolean isCaptured() {
         return isCaptured;
+    }
+
+    public void setCaptured(boolean captured) {
+        this.isCaptured = captured;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public abstract boolean canCapture(Piece piece);
