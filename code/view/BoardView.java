@@ -20,6 +20,18 @@ public class BoardView {
     private BoardController controller;
     private Board board;
 
+/**
+ * Constructs the BoardView for rendering the game board UI.
+ *
+ * Pre-condition:
+ * - controller and board must be initialized.
+ *
+ * Post-condition:
+ * - Creates and prepares the GUI components but does not display them yet.
+ *
+ * @param controller The BoardController managing user interactions.
+ * @param board The Board model for current game state.
+ */
     public BoardView(BoardController controller, Board board) {
         this.controller = controller;
         this.board = board;
@@ -27,6 +39,15 @@ public class BoardView {
         createBoard();
     }
 
+/**
+ * Initializes the display frame with layout and sizing.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - A JFrame is prepared with a fixed size and close behavior.
+ */
     private void initializeFrame() {
         displayFrame = new JFrame("Jungle King");
         displayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,6 +56,15 @@ public class BoardView {
         displayFrame.setResizable(false);
     }
 
+/**
+ * Creates and lays out the main components: board, status, and buttons.
+ *
+ * Pre-condition:
+ * - board must be initialized.
+ *
+ * Post-condition:
+ * - Board tiles, labels, and control buttons are added to the frame.
+ */
     private void createBoard() {
         JPanel container = new JPanel(new BorderLayout(0, 10));
         container.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -66,6 +96,15 @@ public class BoardView {
         displayFrame.add(container);
     }
 
+/**
+ * Creates the top panel showing player turn and game events.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Initializes and configures status labels and panel appearance.
+ */
     private void createStatusPanel() {
         statusPanel = new JPanel(new BorderLayout());
         statusPanel.setPreferredSize(new Dimension(displayFrame.getWidth(), 60));
@@ -88,6 +127,15 @@ public class BoardView {
         statusPanel.add(labelsPanel, BorderLayout.CENTER);
     }
 
+/**
+ * Initializes the board's tile buttons and applies listeners and visuals.
+ *
+ * Pre-condition:
+ * - board must be valid and initialized.
+ *
+ * Post-condition:
+ * - A grid of buttons is created to represent the game board.
+ */
     private void createBoardTiles() {
         tiles = new JButton[board.getRows()][board.getCols()];
 
@@ -112,6 +160,18 @@ public class BoardView {
         }
     }
 
+/**
+ * Updates the visual appearance of a tile based on its type and piece.
+ *
+ * Pre-condition:
+ * - tile and boardTile must be valid.
+ *
+ * Post-condition:
+ * - Button is styled with correct color and icon based on game state.
+ *
+ * @param tile The JButton to modify.
+ * @param boardTile The Tile model tied to that button.
+ */
     private void setupTileAppearance(JButton tile, Tile boardTile) {
         // reset default tile
         tile.setBackground(new Color(200, 200, 200));
@@ -151,12 +211,33 @@ public class BoardView {
         }
     }
 
+/**
+ * Loads a scaled image icon from the resources folder.
+ *
+ * Pre-condition:
+ * - filename must exist in ../resources/.
+ *
+ * Post-condition:
+ * - Returns a scaled ImageIcon of the specified file.
+ *
+ * @param filename The file name of the image.
+ * @return Scaled ImageIcon instance.
+ */
     private ImageIcon loadScaledIcon(String filename) {
         ImageIcon icon = new ImageIcon(getClass().getResource("../resources/" + filename));
         Image image = icon.getImage().getScaledInstance(TILE_SIZE - 20, TILE_SIZE - 20, Image.SCALE_SMOOTH);
         return new ImageIcon(image);
     }
 
+/**
+ * Updates the visual state of all tiles based on the board model.
+ *
+ * Pre-condition:
+ * - board must be initialized.
+ *
+ * Post-condition:
+ * - Refreshes all tiles to match the game state.
+ */
     public void updateBoard() {
         for (int row = 0; row < board.getRows(); row++) {
             for (int col = 0; col < board.getCols(); col++) {
@@ -170,12 +251,34 @@ public class BoardView {
         boardPanel.repaint();
     }
 
+/**
+ * Highlights a tile with a custom border color.
+ *
+ * Pre-condition:
+ * - row and col must be within valid range.
+ *
+ * Post-condition:
+ * - Applies a colored border to the specified tile.
+ *
+ * @param row The row index.
+ * @param col The column index.
+ * @param color The highlight color.
+ */
     public void highlightTile(int row, int col, Color color) {
         if (row >= 0 && row < tiles.length && col >= 0 && col < tiles[0].length) {
             tiles[row][col].setBorder(BorderFactory.createLineBorder(color, 3));
         }
     }
 
+/**
+ * Clears all tile highlights (borders) on the board.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - All tiles revert to default borders.
+ */
     public void clearHighlights() {
         for (JButton[] row : tiles) {
             for (JButton tile : row) {
@@ -184,22 +287,75 @@ public class BoardView {
         }
     }
 
+/**
+ * Updates the displayed current turn label.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Turn label text is updated with current player.
+ *
+ * @param player The name of the current player.
+ */
     public void updateTurn(String player) {
         turnLabel.setText(player + "'s Turn");
     }
 
+/**
+ * Updates the event message label shown to the user.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Event label is updated with the provided message.
+ *
+ * @param message The message to show.
+ */
     public void updateEvent(String message) {
         eventLabel.setText(message);
     }
 
+/**
+ * Displays a popup message dialog to the user.
+ *
+ * Pre-condition:
+ * - message must be non-null.
+ *
+ * Post-condition:
+ * - Shows a blocking message dialog.
+ *
+ * @param message The message to display.
+ */
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(displayFrame, message);
     }
 
+/**
+ * Shows or hides the board frame.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - JFrame visibility is updated.
+ *
+ * @param visible true to show, false to hide.
+ */
     public void setVisible(boolean visible) {
         displayFrame.setVisible(visible);
     }
 
+/**
+ * Closes the board view window and releases resources.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - JFrame is disposed.
+ */
     public void dispose() {
         displayFrame.dispose();
     }
