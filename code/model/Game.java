@@ -2,12 +2,8 @@ package model;
 
 import model.Board;
 import model.pieces.*;
-import model.tiles.Tile;
-import model.tiles.HomeBase;
-import model.tiles.Trap;
-import model.tiles.Lake;
-import model.interfaces.Leaping;
-import model.interfaces.Swimming;
+import model.tiles.*;
+import model.interfaces.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
@@ -18,10 +14,6 @@ public class Game {
     private Player player2;
     private Player currentPlayer;
     private GameState gameState;
-
-   // TEMP
-    private static final int[] BLUE_HOME = {3, 0};
-    private static final int[] GREEN_HOME = {3, 8};
 
     public Game() {
         board = new Board();
@@ -144,12 +136,32 @@ public class Game {
         
         // Check if move is valid
         if (!piece.canMove(destination)) {
-            return false;
+            // Check specific invalid move cases
+            if (destination instanceof Lake) {
+                throw new RuntimeException(piece.getClass().getSimpleName() + " cannot swim in lakes!");
+            }
+            
+            // For Lions and Tigers attempting to leap
+            if ((piece instanceof Lion || piece instanceof Tiger) && 
+                Math.abs(destination.getRow() - currentPos.getRow()) + 
+                Math.abs(destination.getCol() - currentPos.getCol()) > 1) {
+                throw new RuntimeException(piece.getClass().getSimpleName() + " cannot leap over lake - path is blocked!");
+            }
+            
+            throw new RuntimeException("Invalid move!");
         }
 
         // Handle capture
         if (destination.isOccupied()) {
             Piece target = destination.getCurrPiece();
+            
+            // Error handling for Rat capture
+            if (target instanceof Rat && target.getPosition() instanceof Lake && !(piece instanceof Rat)) {
+                throw new RuntimeException("Cannot capture a Rat in the lake!");
+            }
+            if (piece instanceof Rat && piece.getPosition() instanceof Lake && target instanceof Elephant) {
+                throw new RuntimeException("Rat in lake cannot capture Elephant on land!");
+            }
             
             if (piece.canCapture(target)) {
                 target.setCaptured(true);
@@ -158,14 +170,10 @@ public class Game {
                 // Attacker dies
                 piece.setCaptured(true);
                 currentPos.setCurrPiece(null);
-                // destination.setCurrPiece(null);
-                // target.setPosition(currentPos);
-                // currentPos.setCurrPiece(target);
                 return true;
             }
         }
 
-        // Update positions
         currentPos.setCurrPiece(null);
         destination.setCurrPiece(piece);
         piece.setPosition(destination);
@@ -182,8 +190,8 @@ public class Game {
     private boolean checkWinCondition() {
         // Check if current player reached opponent's home base
         Tile opponentHome = currentPlayer == player1 ? 
-            board.getTile(GREEN_HOME[0], GREEN_HOME[1]) : 
-            board.getTile(BLUE_HOME[0], BLUE_HOME[1]);
+            board.getTile(3, 8) : 
+            board.getTile(3, 0);
         
         return opponentHome.isOccupied() && 
                opponentHome.getCurrPiece().getOwner().equals(currentPlayer.getName());

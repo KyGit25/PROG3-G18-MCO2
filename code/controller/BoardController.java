@@ -55,19 +55,21 @@ public class BoardController {
     }
 
     private void handleMove(Tile destination) {
-        if (game.movePiece(selectedPiece, destination)) {
-            view.clearHighlights();
-            selectedPiece = null;
-            isMoving = false;
-            
-            if (game.getGameState().checkVictory()) {
-                handleVictory();
-            } else {
-                game.switchTurn();
-                updateView();
+        try {
+            if (game.movePiece(selectedPiece, destination)) {
+                view.clearHighlights();
+                selectedPiece = null;
+                isMoving = false;
+                
+                if (game.getGameState().checkVictory()) {
+                    handleVictory();
+                } else {
+                    game.switchTurn();
+                    updateView();
+                }
             }
-        } else {
-            view.updateEvent("Invalid move!");
+        } catch (RuntimeException e) {
+            view.updateEvent(e.getMessage());
         }
     }
 
