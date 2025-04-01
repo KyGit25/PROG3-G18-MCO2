@@ -1,6 +1,7 @@
 package model.tiles;
 
 public class Land extends Tile {
+
     public Land(int row, int col) {
         super(row, col);
     }
@@ -8,6 +9,6 @@ public class Land extends Tile {
     @Override
     public void render() 
     {
-        // Rendering logic for land tile
+        // Render logic customize in view
     }
 }
