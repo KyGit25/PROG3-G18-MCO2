@@ -41,7 +41,12 @@ public class Rat extends Piece implements Swimming {
     }
 
     @Override
-    public boolean canMove(Tile destination) {
+    public boolean canMove(Tile destination) 
+    {
+        if (destination instanceof HomeBase && ((HomeBase) destination).getOwner().equals(this.owner)) 
+        {
+            return false;
+        }
         if (destination.isOccupied() && destination.getCurrPiece().getOwner().equals(this.owner)) return false;
 
         int dx = Math.abs(pos.getRow() - destination.getRow());
