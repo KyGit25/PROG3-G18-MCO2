@@ -35,9 +35,14 @@ public class Board {
         initializeBoard();
     }
 /**
+ * Initializes all tiles on the board with their corresponding types.
  *
- * Initializes the board with the different types of tiles
+ * Pre-condition:
+ * - The 2D Tile array must be instantiated.
  *
+ * Post-condition:
+ * - Each tile in the board is assigned the correct type and team color (if applicable).
+ * - Trap, Lake, HomeBase, and Land tiles are placed appropriately.
  */
     private void initializeBoard() {
         // Initialize all tiles as Land first
