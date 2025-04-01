@@ -21,11 +21,24 @@ public class Board {
     private static final int[] BLUE_HOME = {3,0};
     private static final int[] GREEN_HOME = {3,8};
 
+/**
+ * Constructs a new Board and initializes all tiles including land, lake, traps, and home bases.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - A fully initialized board with appropriate tile types is created.
+ */
     public Board() {
         tiles = new Tile[ROWS][COLS];
         initializeBoard();
     }
-
+/**
+ *
+ * Initializes the board with the different types of tiles
+ *
+ */
     private void initializeBoard() {
         // Initialize all tiles as Land first
         for (int row = 0; row < ROWS; row++) {
@@ -69,18 +82,52 @@ public class Board {
             }
         }
     }
-
+/**
+ * Retrieves the tile at a specific row and column on the board.
+ *
+ * Pre-condition:
+ * - row and col must be within the valid bounds of the board (0 ≤ row < 7, 0 ≤ col < 9).
+ *
+ * Post-condition:
+ * - Returns the Tile at the given position if valid.
+ * - Returns null if the position is invalid.
+ *
+ * @param row The row index of the board.
+ * @param col The column index of the board.
+ * @return The Tile at the specified location or null if invalid.
+ */
     public Tile getTile(int row, int col) {
         if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
             return tiles[row][col];
         }
         return null;
     }
-
+/**
+ * Gets the total number of rows on the board.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Returns the number of rows (7).
+ *
+ * @return Total number of rows.
+ */
     public static int getRows() {
         return ROWS;
     }
 
+/**
+ * Gets the total number of columns on the board.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Returns the number of columns (9).
+ *
+ * @return Total number of columns.
+ */
     public static int getCols() {
         return COLS;
     }
