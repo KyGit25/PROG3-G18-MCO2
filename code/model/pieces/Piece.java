@@ -7,8 +7,9 @@ public abstract class Piece {
     protected boolean isCaptured;
     protected String owner;
 
-    public Piece(Tile pos) {
+    public Piece(Tile pos, String owner) {
         this.pos = pos;
+        this.owner = owner;
         this.isCaptured = false;
         if (pos != null) {
             pos.setCurrPiece(this);

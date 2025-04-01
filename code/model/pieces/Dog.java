@@ -4,8 +4,8 @@ import model.tiles.*;
 
 public class Dog extends Piece {
 
-    public Dog(Tile pos) {
-        super(pos);
+    public Dog(Tile pos, String owner) {
+        super(pos, owner);
     }
 
     @Override

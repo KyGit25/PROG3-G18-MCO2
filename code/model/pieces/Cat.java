@@ -4,8 +4,8 @@ import model.tiles.*;
 
 public class Cat extends Piece {
 
-    public Cat(Tile pos) {
-        super(pos);
+    public Cat(Tile pos, String owner) {
+        super(pos, owner);
     }
 
     @Override

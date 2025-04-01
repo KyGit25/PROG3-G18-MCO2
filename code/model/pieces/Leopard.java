@@ -4,8 +4,8 @@ import model.tiles.*;
 
 public class Leopard extends Piece {
 
-    public Leopard(Tile pos) {
-        super(pos);
+    public Leopard(Tile pos, String owner) {
+        super(pos, owner);
     }
 
     @Override
@@ -28,12 +28,9 @@ public class Leopard extends Piece {
     @Override
     public boolean canMove(Tile destination) 
     {
-        if (destination instanceof HomeBase && ((HomeBase) destination).getOwner().equals(this.owner)) 
-        {
-            return false;
-        }
         if (destination instanceof Lake) return false;
         if (destination.isOccupied() && destination.getCurrPiece().getOwner().equals(this.owner)) return false;
+        if (destination instanceof HomeBase && ((HomeBase) destination).getOwner().equals(this.owner)) return false;
 
         int dx = Math.abs(pos.getRow() - destination.getRow());
         int dy = Math.abs(pos.getCol() - destination.getCol());
