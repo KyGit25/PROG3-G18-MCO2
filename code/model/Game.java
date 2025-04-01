@@ -142,7 +142,11 @@ public class Game {
         int p1Strength = getPieceStrength(player1Choice);
         int p2Strength = getPieceStrength(player2Choice);
         
-        currentPlayer = (p1Strength > p2Strength) ? player1 : player2;
+    if (p1Strength > p2Strength) {
+        currentPlayer = player1;
+    } else {
+        currentPlayer = player2;
+    }
         return currentPlayer;
     }
 
@@ -185,11 +189,19 @@ public class Game {
  */
     public void switchTurn() 
     {
-    currentPlayer = (currentPlayer == player1) ? player2 : player1;
-    if (currentPlayer.hasLostAllPieces()) 
-    {
+    if (currentPlayer == player1) {
+        currentPlayer = player2;
+    } else {
+        currentPlayer = player1;
+    }
+
+    if (currentPlayer.hasLostAllPieces()) {
         // Forfeit turn if no pieces
-        currentPlayer = (currentPlayer == player1) ? player2 : player1;
+        if (currentPlayer == player1) {
+            currentPlayer = player2;
+        } else {
+            currentPlayer = player1;
+        }
     }
     }
 
@@ -288,10 +300,13 @@ public class Game {
  * @return true if win condition is met; false otherwise.
  */
     private boolean checkWinCondition() {
-        // Check if current player reached opponent's home base
-        Tile opponentHome = currentPlayer == player1 ? 
-            board.getTile(3, 8) : 
-            board.getTile(3, 0);
+    Tile opponentHome;
+
+    if (currentPlayer == player1) {
+        opponentHome = board.getTile(3, 8);
+    } else {
+        opponentHome = board.getTile(3, 0);
+    }
         
         return opponentHome.isOccupied() && 
                opponentHome.getCurrPiece().getOwner().equals(currentPlayer.getName());
