@@ -6,15 +6,32 @@ import model.Game;
 
 public class Tiger extends Piece implements Leaping {
 
+/**
+ * Constructs a Tiger piece.
+ *
+ * @param pos Initial position.
+ * @param owner Owner of the Tiger.
+ */
     public Tiger(Tile pos, String owner) {
         super(pos, owner);
     }
 
+/**
+ * Returns the Tiger's strength.
+ *
+ * @return 6
+ */
     @Override
     public int getStrength() {
         return 6;
     }
 
+/**
+ * Determines if the Tiger can capture the target.
+ *
+ * @param target The enemy piece.
+ * @return true if capture is allowed.
+ */
     @Override
     public boolean canCapture(Piece target) {
         if (target == null || target.getOwner().equals(this.owner)) return false;
@@ -27,6 +44,14 @@ public class Tiger extends Piece implements Leaping {
         return this.getStrength() >= target.getStrength();
     }
 
+/**
+ * Checks if the Tiger can move to the destination.
+ *
+ * - Allows leap over lake or normal 1-tile move.
+ *
+ * @param destination The tile to move to.
+ * @return true if move is valid.
+ */
     @Override
     public boolean canMove(Tile destination) 
     {
@@ -49,6 +74,12 @@ public class Tiger extends Piece implements Leaping {
         return leap(destination) != null;
     }
 
+/**
+ * Attempts to leap over lake tiles to the destination.
+ *
+ * @param destination Target tile.
+ * @return destination if leap is valid, else null.
+ */
     @Override
     public Tile leap(Tile destination) {
         int currRow = pos.getRow();
