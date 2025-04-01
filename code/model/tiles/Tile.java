@@ -7,6 +7,7 @@ public abstract class Tile {
     protected int row;
     protected int col;
     protected Piece currPiece;
+    private String type;
 
     public Tile(int row, int col) {
         this.row = row;
@@ -36,12 +37,21 @@ public abstract class Tile {
     }
 
     public boolean setCurrPiece(Piece piece) {
-        if (this.currPiece == null) {
-            this.currPiece = piece;
-            return true;
-        }
-        return false;
+        this.currPiece = piece;
+        return true;
+    }
+
+    public void removePiece() {
+        this.currPiece = null;
     }
 
     public abstract void render();
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
 }
