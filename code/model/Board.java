@@ -1,18 +1,17 @@
+package model.board;
+
+import model.pieces.*;
+import model.Player;
+import model.tiles.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * The Board class represents the game board for a strategy game. It contains
- * a grid of tiles where pieces, traps, lakes, and home bases are placed.
- * */
-public class Board 
-{
+public class Board {
+    private Tile[][] tiles;
     private static final int ROWS = 7;
     private static final int COLS = 9;
-    private String[][] grid;
 
-    // TEMP
+    // Positions for special tiles
     private static final int[][] LAKE_POSITIONS = {
         {1,3}, {1,4}, {1,5}, {2,3}, {2,4}, {2,5},
         {4,3}, {4,4}, {4,5}, {5,3}, {5,4}, {5,5}
@@ -23,32 +22,61 @@ public class Board
     private static final int[] GREEN_HOME = {3,8};
 
     public Board() {
-        grid = new String[ROWS][COLS];
+        tiles = new Tile[ROWS][COLS];
         initializeBoard();
     }
 
     private void initializeBoard() {
-        // init all tiles as land
+        // Initialize all tiles as Land first
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                grid[row][col] = "LAND";
+                tiles[row][col] = new Land(row, col);
             }
         }
 
-        // set lakes, traps, and bases
+        // Set lakes
         for (int[] pos : LAKE_POSITIONS) {
-            grid[pos[0]][pos[1]] = "LAKE";
+            tiles[pos[0]][pos[1]] = new Lake(pos[0], pos[1]);
         }
 
+        // Set blue traps
         for (int[] pos : BLUE_TRAPS) {
-            grid[pos[0]][pos[1]] = "BLUE_TRAP";
-        }
-        for (int[] pos : GREEN_TRAPS) {
-            grid[pos[0]][pos[1]] = "GREEN_TRAP";
+            tiles[pos[0]][pos[1]] = new Trap(pos[0], pos[1], "Blue");
         }
 
-        grid[BLUE_HOME[0]][BLUE_HOME[1]] = "BLUE_HOME";
-        grid[GREEN_HOME[0]][GREEN_HOME[1]] = "GREEN_HOME";
+        // Set green traps
+        for (int[] pos : GREEN_TRAPS) {
+            tiles[pos[0]][pos[1]] = new Trap(pos[0], pos[1], "Green");
+        }
+
+        // Set home bases
+        tiles[BLUE_HOME[0]][BLUE_HOME[1]] = new HomeBase(BLUE_HOME[0], BLUE_HOME[1], "Blue");
+        tiles[GREEN_HOME[0]][GREEN_HOME[1]] = new HomeBase(GREEN_HOME[0], GREEN_HOME[1], "Green");
+    }
+
+    public void render() {
+        // Render the board (implementation depends on view)
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                tiles[row][col].render();
+            }
+        }
+    }
+
+    public Tile getTile(int row, int col) {
+        if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
+            return tiles[row][col];
+        }
+        return null;
+    }
+
+    public Tile getTile(String pos) {
+        if (pos.length() == 2) {
+            int row = Character.getNumericValue(pos.charAt(0));
+            int col = Character.getNumericValue(pos.charAt(1));
+            return getTile(row, col);
+        }
+        return null;
     }
 
     public boolean isLake(int row, int col) {
@@ -74,10 +102,6 @@ public class Board
         } else {
             return row == GREEN_HOME[0] && col == GREEN_HOME[1];
         }
-    }
-
-    public String getTileAt(int row, int col) {
-        return grid[row][col];
     }
 
     public static int getRows() {
