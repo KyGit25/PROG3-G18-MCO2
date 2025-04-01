@@ -10,12 +10,32 @@ public class MenuView {
     private MenuController controller;
     private JPanel mainPanel;
 
+/**
+ * Constructs the MenuView and displays the main menu UI.
+ *
+ * Pre-condition:
+ * - controller must be a valid MenuController instance.
+ *
+ * Post-condition:
+ * - Initializes menu components and shows the window.
+ *
+ * @param controller The controller handling menu actions.
+ */
     public MenuView(MenuController controller) {
         this.controller = controller;
         initializeFrame();
         createMenuComponents();
     }
 
+/**
+ * Initializes the main JFrame for the menu.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Frame properties (size, close op, background) are set.
+ */
     private void initializeFrame() {
         mainFrame = new JFrame("Jungle King");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -24,6 +44,15 @@ public class MenuView {
         mainFrame.setResizable(false);
     }
 
+/**
+ * Creates and lays out the components on the menu screen.
+ *
+ * Pre-condition:
+ * - mainFrame must be initialized.
+ *
+ * Post-condition:
+ * - Menu buttons, labels, and decorative images are added to the frame.
+ */
     private void createMenuComponents() {
         // main container
         JPanel container = new JPanel(null);
@@ -69,6 +98,18 @@ public class MenuView {
         mainFrame.add(container);
     }
 
+/**
+ * Creates a styled button with consistent look and feel.
+ *
+ * Pre-condition:
+ * - text must be a valid button label.
+ *
+ * Post-condition:
+ * - Returns a button with preferred size and style.
+ *
+ * @param text The label for the button.
+ * @return A styled JButton instance.
+ */
     private JButton createMenuButton(String text) {
         JButton button = new JButton(text);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -80,6 +121,19 @@ public class MenuView {
         return button;
     }
 
+/**
+ * Creates and positions a home base image icon.
+ *
+ * Pre-condition:
+ * - filename must exist in ../resources/ directory.
+ *
+ * Post-condition:
+ * - Returns a JLabel with the scaled image and positioned correctly.
+ *
+ * @param filename Image file to load.
+ * @param isLeft true if it should appear on the left side.
+ * @return A JLabel containing the home base image.
+ */
     private JLabel createHomeBase(String filename, boolean isLeft) {
         final String RESOURCE_PATH = "../resources/";
         final int HOME_BASE_SIZE = 150;
@@ -100,6 +154,15 @@ public class MenuView {
         return homeBase;
     }
 
+/**
+ * Displays the game instructions in a formatted dialog.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Shows a modal dialog with HTML-formatted rules and how to play.
+ */
     public void showInstructions() {
         final String INSTRUCTIONS = 
             "<html><div style='text-align: left; padding: 20px; width: 500px;'>" +
@@ -154,10 +217,30 @@ public class MenuView {
         );
     }
 
+/**
+ * Shows or hides the menu window.
+ *
+ * Pre-condition:
+ * - mainFrame must be initialized.
+ *
+ * Post-condition:
+ * - JFrame visibility is updated accordingly.
+ *
+ * @param visible true to show the menu, false to hide it.
+ */
     public void setVisible(boolean visible) {
         mainFrame.setVisible(visible);
     }
 
+/**
+ * Disposes the menu window and releases resources.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Frame is closed and memory is freed.
+ */
     public void dispose() {
         mainFrame.dispose();
     }
