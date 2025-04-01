@@ -3,6 +3,7 @@
  * It initializes and starts the game.
  */
 import javax.swing.SwingUtilities;
+import controller.GameController;
 
 public class Main {
     

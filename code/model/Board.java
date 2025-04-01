@@ -1,4 +1,4 @@
-package model.board;
+package model;
 
 import model.pieces.*;
 import model.Player;
