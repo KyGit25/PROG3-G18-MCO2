@@ -1,13 +1,16 @@
+package view;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import controller.MenuController;
 
 public class MenuView {
     private JFrame mainFrame;
-    private GameController controller;
+    private MenuController controller;
     private JPanel mainPanel;
 
-    public MenuView(GameController controller) {
+    public MenuView(MenuController controller) {
         this.controller = controller;
         initializeFrame();
         createMenuComponents();
@@ -54,7 +57,7 @@ public class MenuView {
         mainPanel.add(exitButton);
 
         startButton.addActionListener(e -> controller.startNewGame());
-        instructionsButton.addActionListener(e -> showInstructions());
+        instructionsButton.addActionListener(e -> controller.showInstructions());
         exitButton.addActionListener(e -> controller.exitGame());
 
         container.add(blueHome);
@@ -78,7 +81,7 @@ public class MenuView {
     }
 
     private JLabel createHomeBase(String filename, boolean isLeft) {
-        final String RESOURCE_PATH = "./resources/";
+        final String RESOURCE_PATH = "../resources/";
         final int HOME_BASE_SIZE = 150;
         final int LEFT_MARGIN = 50;
         final int RIGHT_MARGIN = 600;
@@ -97,7 +100,7 @@ public class MenuView {
         return homeBase;
     }
 
-    private void showInstructions() {
+    public void showInstructions() {
         final String INSTRUCTIONS = 
             "<html><div style='text-align: left; padding: 20px; width: 500px;'>" +
             "<h2 style='text-align: center;'>How to Play Jungle King</h2>" +
