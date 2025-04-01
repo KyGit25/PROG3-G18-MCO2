@@ -26,7 +26,12 @@ public class Wolf extends Piece {
     }
 
     @Override
-    public boolean canMove(Tile destination) {
+    public boolean canMove(Tile destination) 
+    {
+        if (destination instanceof HomeBase && ((HomeBase) destination).getOwner().equals(this.owner)) 
+        {
+            return false;
+        }
         if (destination instanceof Lake) return false;
         if (destination.isOccupied() && destination.getCurrPiece().getOwner().equals(this.owner)) return false;
 
