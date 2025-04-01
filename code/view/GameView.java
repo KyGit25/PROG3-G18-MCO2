@@ -1,7 +1,10 @@
+package view;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
+import controller.GameController;
 
 public class GameView {
     private JFrame selectionFrame;
@@ -49,7 +52,7 @@ public class GameView {
     }
 
     private ImageIcon loadScaledIcon(String filename) {
-        ImageIcon icon = new ImageIcon(getClass().getResource("./resources/" + filename)); // Resource path
+        ImageIcon icon = new ImageIcon(getClass().getResource("../resources/" + filename)); // Resource path
         Image scaledImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH); // Icon size
         return new ImageIcon(scaledImage);
     }
