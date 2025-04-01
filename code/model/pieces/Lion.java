@@ -2,6 +2,7 @@ package model.pieces;
 
 import model.tiles.*;
 import model.interfaces.Leaping;
+import model.Game;
 
 public class Lion extends Piece implements Leaping {
 
@@ -61,7 +62,9 @@ public class Lion extends Piece implements Leaping {
         if (currRow == destRow && Math.abs(destCol - currCol) > 1) {
             int dir = (destCol > currCol) ? 1 : -1;
             for (int c = currCol + dir; c != destCol; c += dir) {
-                if (!(pos instanceof Lake) || (pos.isOccupied() && pos.getCurrPiece() instanceof Rat)) {
+                Tile tile = Game.getBoard().getTile(currRow, c);
+                if (!(tile instanceof Lake) || 
+                    (tile.isOccupied() && tile.getCurrPiece() instanceof Rat)) {
                     return null;
                 }
             }
@@ -72,7 +75,8 @@ public class Lion extends Piece implements Leaping {
         if (currCol == destCol && Math.abs(destRow - currRow) > 1) {
             int dir = (destRow > currRow) ? 1 : -1;
             for (int r = currRow + dir; r != destRow; r += dir) {
-                if (!(pos instanceof Lake) || (pos.isOccupied() && pos.getCurrPiece() instanceof Rat)) {
+                Tile tile = Game.getBoard().getTile(r, currCol);
+                if (!(tile instanceof Lake) || (tile.isOccupied() && tile.getCurrPiece() instanceof Rat)) {
                     return null;
                 }
             }
