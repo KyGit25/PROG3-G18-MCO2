@@ -147,11 +147,17 @@ public class Game {
     }
 
 /**
- * Gets the piece strength to determine which player goes first
+ * Returns the strength value of a given piece name.
  *
- * @param pieceName The name of the animal
- * @return strength number
+ * Pre-condition:
+ * - pieceName must match a valid animal name (case-sensitive).
  *
+ * Post-condition:
+ * - Returns an integer from 1 to 8 representing the piece's strength.
+ * - Returns 0 if the name is invalid.
+ *
+ * @param pieceName The name of the animal piece.
+ * @return The strength value of the piece.
  */
     private int getPieceStrength(String pieceName) {
         switch (pieceName) {
@@ -271,10 +277,15 @@ public class Game {
     }
 
 /**
- * Verify if win condition is met
+ * Checks if the current player has won the game.
  *
- * @return True if 
+ * Pre-condition:
+ * - currentPlayer and board must be initialized.
  *
+ * Post-condition:
+ * - Returns true if the current player occupies the opponent's home base.
+ *
+ * @return true if win condition is met; false otherwise.
  */
     private boolean checkWinCondition() {
         // Check if current player reached opponent's home base
