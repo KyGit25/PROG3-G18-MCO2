@@ -1,40 +1,27 @@
+package model;
+
 public class GameState {
-    private String player1Piece;
-    private String player2Piece;
-    private boolean isPlayer1Turn;
+    private boolean isGameOver;
+    private Player winner;
 
     public GameState() {
-        reset();
+        this.isGameOver = false;
+        this.winner = null;
     }
 
-    public void reset() {
-        player1Piece = null;
-        player2Piece = null;
-        isPlayer1Turn = true;
+    public boolean checkVictory() {
+        return isGameOver;
     }
 
-    public void selectPiece(String piece) {
-        if (isPlayer1Turn) {
-            player1Piece = piece;
-            isPlayer1Turn = false;
-        } else {
-            player2Piece = piece;
-        }
+    public Player getWinner() {
+        return winner;
     }
 
-    public boolean isPlayer1Turn() {
-        return isPlayer1Turn;
+    public void setGameOver(boolean gameOver) {
+        this.isGameOver = gameOver;
     }
 
-    public boolean isSelectionComplete() {
-        return player1Piece != null && player2Piece != null;
+    public void setWinner(Player winner) {
+        this.winner = winner;
     }
-
-    public String getPlayer1Piece() {
-        return player1Piece;
-    }
-
-    public String getPlayer2Piece() {
-        return player2Piece;
-    }
-} 
+}
