@@ -86,7 +86,12 @@ public class Rat extends Piece implements Swimming {
  * @return destination if it's a lake, else null.
  */
     @Override
-    public Tile swim(Tile destination) {
-        return (destination instanceof Lake) ? destination : null;
+    public Tile swim(Tile destination) 
+    {
+    if (destination instanceof Lake) {
+        return destination;
+    } else {
+        return null;
+    }
     }
 }
