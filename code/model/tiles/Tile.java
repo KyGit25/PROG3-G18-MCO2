@@ -1,47 +1,47 @@
-public abstract class Tile{
-	protected String tilePosition;
-	protected int row;
-	protected int col;
-	protected Piece currentPiece;
-	protected String owner;
+package model.tiles;
 
-	public Tile(int row, int col){
-		this.row = row;
-		this.col = col;
-		this.tilePosition = row + "" + col;
-		this.currentPiece = null;
-		this.owner = owner;
-	}
+import model.pieces.Piece;
 
-	public abstract void render();
+public abstract class Tile {
+    protected String tilePos;
+    protected int row;
+    protected int col;
+    protected Piece currPiece;
 
-	public String getTilePosition(){
-		return this.tilePosition;
-	}
+    public Tile(int row, int col) {
+        this.row = row;
+        this.col = col;
+        this.tilePos = row + "" + col;
+        this.currPiece = null;
+    }
 
-	public int getRow(){
-		return this.row;
-	}
+    public String getTilePos() {
+        return tilePos;
+    }
 
-	public int getCol(){
-		return this.col;
-	}
+    public int getRow() {
+        return row;
+    }
 
-	public Piece getCurrentPiece(){
-		return this.currentPiece;
-	}
+    public int getCol() {
+        return col;
+    }
 
-	public boolean setCurrentPiece(Piece piece){
-		if(this.currentPiece == null){
-			this.currentPiece = piece;
-			return true;
-		}
-		return false;
-	}
+    public boolean isOccupied() {
+        return currPiece != null;
+    }
 
-	public boolean isOccupied(){
-		return this.currentPiece != null;
-	}
+    public Piece getCurrPiece() {
+        return currPiece;
+    }
 
-	protected abstract String getOwner();
+    public boolean setCurrPiece(Piece piece) {
+        if (this.currPiece == null) {
+            this.currPiece = piece;
+            return true;
+        }
+        return false;
+    }
+
+    public abstract void render();
 }
