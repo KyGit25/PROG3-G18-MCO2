@@ -25,12 +25,30 @@ public class GameView {
         "Wolf", "Dog", "Cat", "Rat"
     };
 
+/**
+ * Constructs a GameView for piece selection phase.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Initializes the selection frame and GUI components.
+ */
     public GameView() {
         initializeSelectionFrame();
         loadResources();
         loadPieceSelection();
     }
 
+/**
+ * Initializes the frame used for piece selection.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Configures frame size, close operation, appearance.
+ */
     private void initializeSelectionFrame() {
         selectionFrame = new JFrame("Jungle King - Piece Selection");
         selectionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,6 +59,15 @@ public class GameView {
         isPlayer1Turn = true;
     }
 
+/**
+ * Loads animal icons (blue and green) for piece selection.
+ *
+ * Pre-condition:
+ * - Image resources must exist under ../resources/.
+ *
+ * Post-condition:
+ * - Loads and stores scaled ImageIcons for each piece.
+ */
     private void loadResources() {
         blueAnimalIcons = new ImageIcon[ANIMAL_NAMES.length];
         greenAnimalIcons = new ImageIcon[ANIMAL_NAMES.length];
@@ -51,12 +78,33 @@ public class GameView {
         }
     }
 
+/**
+ * Loads a scaled icon from resources folder.
+ *
+ * Pre-condition:
+ * - filename must be a valid resource path.
+ *
+ * Post-condition:
+ * - Returns an ImageIcon scaled to 60x60.
+ *
+ * @param filename File name of the icon to load.
+ * @return Scaled ImageIcon for GUI.
+ */
     private ImageIcon loadScaledIcon(String filename) {
         ImageIcon icon = new ImageIcon(getClass().getResource("../resources/" + filename)); // Resource path
         Image scaledImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH); // Icon size
         return new ImageIcon(scaledImage);
     }
 
+/**
+ * Builds and lays out the piece selection interface.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Adds labels, buttons, and panels to selection frame.
+ */
     private void loadPieceSelection() {
         selectionFrame.setLayout(new BorderLayout());
 
@@ -84,6 +132,18 @@ public class GameView {
         selectionFrame.add(mainPanel, BorderLayout.CENTER);
     }
 
+/**
+ * Creates a styled label for status messages.
+ *
+ * Pre-condition:
+ * - text must not be null.
+ *
+ * Post-condition:
+ * - Returns a centered bold label.
+ *
+ * @param text The label's initial content.
+ * @return JLabel with applied styling.
+ */
     private JLabel createStyledLabel(String text) {
         JLabel label = new JLabel(text, SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 18));
@@ -91,6 +151,17 @@ public class GameView {
         return label;
     }
 
+/**
+ * Displays the piece selection options to players.
+ *
+ * Pre-condition:
+ * - pieces must contain 8 valid animal names.
+ *
+ * Post-condition:
+ * - Populates piece buttons with listeners and assigns metadata.
+ *
+ * @param pieces List of animal names to be shown.
+ */
     public void showPieceSelection(List<String> pieces) {
         selectionPanel.removeAll();
 
@@ -124,12 +195,32 @@ public class GameView {
         selectionPanel.repaint();
     }
 
+/**
+ * Disables all piece buttons (after selection is done).
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - All piece buttons become non-clickable.
+ */
     public void disableAllButtons() {
         for (JButton button : pieceButtons) {
             button.setEnabled(false);
         }
     }
 
+/**
+ * Disables the button for a specific piece.
+ *
+ * Pre-condition:
+ * - piece must match one of the button's labels.
+ *
+ * Post-condition:
+ * - That specific piece button becomes disabled.
+ *
+ * @param piece The name of the piece to disable.
+ */
     public void disablePieceButton(String piece) {
         for (JButton button : pieceButtons) {
             if (button.getText().equals(piece)) {
@@ -139,6 +230,17 @@ public class GameView {
         }
     }
 
+/**
+ * Updates the status label (e.g., player turn info).
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Displays the new status and updates player turn flag.
+ *
+ * @param message The status text to display.
+ */
     public void updateStatus(String message) {
         statusLabel.setText(message);
         if (message.startsWith("Player 2")) {
@@ -146,18 +248,60 @@ public class GameView {
         }
     }
 
+/**
+ * Shows a popup dialog message.
+ *
+ * Pre-condition:
+ * - message must not be null.
+ *
+ * Post-condition:
+ * - Dialog with message is shown to the user.
+ *
+ * @param message The message to display.
+ */
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(selectionFrame, message);
     }
 
+/**
+ * Assigns the GameController to this view.
+ *
+ * Pre-condition:
+ * - controller must not be null.
+ *
+ * Post-condition:
+ * - View can now trigger events back to controller.
+ *
+ * @param controller The GameController instance.
+ */
     public void setController(GameController controller) {
         this.controller = controller;
     }
 
+/**
+ * Sets the visibility of the selection frame.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Frame becomes visible or hidden.
+ *
+ * @param visible true to show, false to hide.
+ */
     public void setVisible(boolean visible) {
         selectionFrame.setVisible(visible);
     }
 
+/**
+ * Disposes the selection window and releases resources.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Frame is closed and memory is released.
+ */
     public void dispose() {
         selectionFrame.dispose();
     }
