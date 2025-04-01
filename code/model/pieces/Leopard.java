@@ -4,15 +4,32 @@ import model.tiles.*;
 
 public class Leopard extends Piece {
 
+/**
+ * Constructs a Leopard with starting position and owner.
+ *
+ * @param pos Starting tile.
+ * @param owner Owner's name.
+ */
     public Leopard(Tile pos, String owner) {
         super(pos, owner);
     }
 
+/**
+ * Gets Leopard's strength.
+ *
+ * @return 5.
+ */
     @Override
     public int getStrength() {
         return 5;
     }
 
+/**
+ * Determines if Leopard can capture the target piece.
+ *
+ * @param target The piece to capture.
+ * @return true if capture is valid.
+ */
     @Override
     public boolean canCapture(Piece target) {
         if (target == null || target.getOwner().equals(this.owner)) return false;
@@ -25,6 +42,12 @@ public class Leopard extends Piece {
         return this.getStrength() >= target.getStrength();
     }
 
+/**
+ * Checks if the Leopard can move to the destination.
+ *
+ * @param destination The target tile.
+ * @return true if move is valid.
+ */
     @Override
     public boolean canMove(Tile destination) 
     {
