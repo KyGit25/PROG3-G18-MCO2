@@ -17,6 +17,10 @@ public class Game {
     private Player currentPlayer;
     private GameState gameState;
 
+   // TEMP
+    private static final int[] BLUE_HOME = {3, 0};
+    private static final int[] GREEN_HOME = {3, 8};
+
     public Game() {
         this.board = new Board();
         this.player1 = new Player("Blue");

@@ -117,21 +117,23 @@ public class BoardView {
                 tile.setOpaque(true);
                 tile.setBackground(new Color(200, 200, 200));
                 
-                String tileType = board.getTileAt(row, col);
-                switch (tileType) {
-                    case "LAKE":
-                        tile.setBackground(new Color(165, 206, 230));
-                        break;
-                    case "BLUE_TRAP":
-                    case "GREEN_TRAP":
+                Tile boardTile = board.getTile(row, col);
+                
+                if (boardTile instanceof Lake) {
+                    tile.setBackground(new Color(165, 206, 230));
+                } else if (boardTile instanceof Trap) {
+                    Trap trap = (Trap) boardTile;
+                    String owner = trap.getOwner();
+                    if (owner != null) {
                         tile.setIcon(loadScaledIcon("trap.png"));
-                        break;
-                    case "BLUE_HOME":
-                        tile.setIcon(loadScaledIcon("b_homebase.png"));
-                        break;
-                    case "GREEN_HOME":
-                        tile.setIcon(loadScaledIcon("g_homebase.png"));
-                        break;
+                    }
+                } else if (boardTile instanceof HomeBase) {
+                    HomeBase home = (HomeBase) boardTile;
+                    String owner = home.getOwner();
+                    if (owner != null) {
+                        String prefix = owner.equals("Blue") ? "b_" : "g_";
+                        tile.setIcon(loadScaledIcon(prefix + "homebase.png"));
+                    }
                 }
 
                 addPieceToTile(tile, row, col);
@@ -165,7 +167,7 @@ public class BoardView {
     }
 
     private ImageIcon loadScaledIcon(String filename) {
-        ImageIcon icon = new ImageIcon(getClass().getResource("./resources/" + filename));
+        ImageIcon icon = new ImageIcon(getClass().getResource("../resources/" + filename));
         Image image = icon.getImage().getScaledInstance(TILE_SIZE - 20, TILE_SIZE - 20, Image.SCALE_SMOOTH);
         return new ImageIcon(image);
     }
