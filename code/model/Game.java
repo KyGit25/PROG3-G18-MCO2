@@ -15,6 +15,15 @@ public class Game {
     private Player currentPlayer;
     private GameState gameState;
 
+/**
+ * Constructs a new Game with two players, a board, game state, and initializes all pieces.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Game setup is complete with board and both players having their pieces placed.
+ */
     public Game() {
         board = new Board();
         this.player1 = new Player("Blue");
@@ -22,7 +31,16 @@ public class Game {
         this.gameState = new GameState();
         initializePieces();
     }
-
+    
+/**
+ * Initializes and places all animal pieces for both players on the board.
+ *
+ * Pre-condition:
+ * - Board and players must already be initialized.
+ *
+ * Post-condition:
+ * - All pieces are added to their respective players and positioned on the board.
+ */
     public void initializePieces() {
         // Blue pieces based on the provided positions
         Tiger blueTiger = new Tiger(board.getTile(0, 0), "Blue");
@@ -75,6 +93,17 @@ public class Game {
         player2.addPiece(greenRat);
     }
 
+/**
+ * Returns a shuffled list of piece names.
+ *
+ * Pre-condition:
+ * - None.
+ *
+ * Post-condition:
+ * - Returns a list containing all 8 animal types in random order.
+ *
+ * @return A shuffled List of piece names.
+ */
     public List<String> getShuffledPieces() {
         List<String> pieces = new ArrayList<>();
         pieces.add("Elephant");
@@ -96,6 +125,19 @@ public class Game {
         return pieces;
     }
 
+/**
+ * Determines which player goes first based on chosen piece strengths.
+ *
+ * Pre-condition:
+ * - Each player selects a valid piece name from the set of defined animals.
+ *
+ * Post-condition:
+ * - The currentPlayer is set to the player with the stronger piece.
+ *
+ * @param player1Choice The piece name selected by player 1.
+ * @param player2Choice The piece name selected by player 2.
+ * @return The Player who will start the game.
+ */
     public Player determineFirstPlayer(String player1Choice, String player2Choice) {
         int p1Strength = getPieceStrength(player1Choice);
         int p2Strength = getPieceStrength(player2Choice);
@@ -104,6 +146,13 @@ public class Game {
         return currentPlayer;
     }
 
+/**
+ * Gets the piece strength to determine which player goes first
+ *
+ * @param pieceName The name of the animal
+ * @return strength number
+ *
+ */
     private int getPieceStrength(String pieceName) {
         switch (pieceName) {
             case "Elephant": return 8;
@@ -118,6 +167,16 @@ public class Game {
         }
     }
 
+/**
+ * Switches the turn to the other player.
+ *
+ * Pre-condition:
+ * - currentPlayer must not be null.
+ *
+ * Post-condition:
+ * - currentPlayer is updated to the other player.
+ * - If the other player has no active pieces, switch back to the original player.
+ */
     public void switchTurn() 
     {
     currentPlayer = (currentPlayer == player1) ? player2 : player1;
@@ -128,6 +187,23 @@ public class Game {
     }
     }
 
+/**
+ * Attempts to move a piece to the specified destination tile.
+ *
+ * Pre-condition:
+ * - piece and destination are not null.
+ * - piece must belong to the current player and have a valid move.
+ *
+ * Post-condition:
+ * - Piece is moved if the move is valid.
+ * - Capture is resolved if applicable.
+ * - Game state is updated if the move results in a win.
+ *
+ * @param piece The piece to be moved.
+ * @param destination The tile to move the piece to.
+ * @return true if the move was valid and performed; false otherwise.
+ * 
+ */
     public boolean movePiece(Piece piece, Tile destination) {
         if (piece == null || destination == null) return false;
         
@@ -194,6 +270,12 @@ public class Game {
         return true;
     }
 
+/**
+ * Verify if win condition is met
+ *
+ * @return True if 
+ *
+ */
     private boolean checkWinCondition() {
         // Check if current player reached opponent's home base
         Tile opponentHome = currentPlayer == player1 ? 
@@ -204,14 +286,47 @@ public class Game {
                opponentHome.getCurrPiece().getOwner().equals(currentPlayer.getName());
     }
 
+/**
+ * Gets the current board.
+ *
+ * Pre-condition:
+ * - Game must be initialized.
+ *
+ * Post-condition:
+ * - Returns the board object used in the game.
+ *
+ * @return The board instance.
+ */
     public static Board getBoard() {
         return board;
     }
 
+/**
+ * Returns the current player whose turn it is.
+ *
+ * Pre-condition:
+ * - Game must be started and player turns established.
+ *
+ * Post-condition:
+ * - Returns the current Player.
+ *
+ * @return The player whose turn it currently is.
+ */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
-
+    
+/**
+ * Returns the current game state.
+ *
+ * Pre-condition:
+ * - Game must be initialized.
+ *
+ * Post-condition:
+ * - Returns the GameState object tracking win condition and game over state.
+ *
+ * @return The GameState instance.
+ */
     public GameState getGameState() {
         return gameState;
     }
