@@ -3,7 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import controller.GameController;
+import controller.BoardController;
 import model.Board;
 import model.tiles.Tile;
 import model.tiles.Lake;
@@ -14,39 +14,16 @@ import model.pieces.Piece;
 public class BoardView {
     private static final int TILE_SIZE = 80;
 
-    // piece positions
-    private static final Object[][] BLUE_PIECES = {
-        {"Tiger", 0, 0},
-        {"Cat", 1, 1}, 
-        {"Elephant", 0, 2},
-        {"Wolf", 2, 2}, 
-        {"Leopard", 4, 2}, 
-        {"Dog", 5, 1},
-        {"Lion", 6, 0}, 
-        {"Rat", 6, 2}
-    };
-    
-    private static final Object[][] GREEN_PIECES = {
-        {"Tiger", 6, 8},
-        {"Cat", 5, 7}, 
-        {"Elephant", 6, 6},
-        {"Wolf", 4, 6}, 
-        {"Leopard", 2, 6}, 
-        {"Dog", 1, 7},
-        {"Lion", 0, 8}, 
-        {"Rat", 0, 6}
-    };
-
     private JFrame displayFrame;
     private JPanel boardPanel;
     private JPanel statusPanel;
     private JLabel turnLabel;
     private JLabel eventLabel;
     private JButton[][] tiles;
-    private GameController controller;
+    private BoardController controller;
     private Board board;
 
-    public BoardView(GameController controller, Board board) {
+    public BoardView(BoardController controller, Board board) {
         this.controller = controller;
         this.board = board;
         initializeFrame();
@@ -75,6 +52,20 @@ public class BoardView {
         createBoardTiles();
         container.add(boardPanel, BorderLayout.CENTER);
 
+        // Add menu buttons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        buttonPanel.setBackground(new Color(245, 245, 245));
+        
+        JButton restartButton = new JButton("Restart");
+        JButton menuButton = new JButton("Menu");
+        
+        restartButton.addActionListener(e -> controller.restartGame());
+        menuButton.addActionListener(e -> controller.returnToMenu());
+        
+        buttonPanel.add(restartButton);
+        buttonPanel.add(menuButton);
+        container.add(buttonPanel, BorderLayout.SOUTH);
+
         displayFrame.add(container);
     }
 
@@ -84,19 +75,14 @@ public class BoardView {
         statusPanel.setBackground(new Color(245, 245, 245));
         statusPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
-        // turn
-        // TEMP
-        turnLabel = new JLabel("Blue's Turn", SwingConstants.CENTER);
+        turnLabel = new JLabel("", SwingConstants.CENTER);
         turnLabel.setFont(new Font("Arial", Font.BOLD, 18));
         turnLabel.setForeground(new Color(50, 50, 50));
         
-        // event
-        // TEMP
-        eventLabel = new JLabel("Select a piece to move", SwingConstants.CENTER);
+        eventLabel = new JLabel("", SwingConstants.CENTER);
         eventLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         eventLabel.setForeground(new Color(100, 100, 100));
 
-        // load labels
         JPanel labelsPanel = new JPanel(new GridLayout(2, 1, 0, 5));
         labelsPanel.setBackground(new Color(245, 245, 245));
         labelsPanel.add(turnLabel);
@@ -115,28 +101,13 @@ public class BoardView {
                 tile.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
                 tile.setContentAreaFilled(true);
                 tile.setOpaque(true);
-                tile.setBackground(new Color(200, 200, 200));
+                
+                final int finalRow = row;
+                final int finalCol = col;
+                tile.addActionListener(e -> controller.onTileClicked(finalRow, finalCol));
                 
                 Tile boardTile = board.getTile(row, col);
-                
-                if (boardTile instanceof Lake) {
-                    tile.setBackground(new Color(165, 206, 230));
-                } else if (boardTile instanceof Trap) {
-                    Trap trap = (Trap) boardTile;
-                    String owner = trap.getOwner();
-                    if (owner != null) {
-                        tile.setIcon(loadScaledIcon("trap.png"));
-                    }
-                } else if (boardTile instanceof HomeBase) {
-                    HomeBase home = (HomeBase) boardTile;
-                    String owner = home.getOwner();
-                    if (owner != null) {
-                        String prefix = owner.equals("Blue") ? "b_" : "g_";
-                        tile.setIcon(loadScaledIcon(prefix + "homebase.png"));
-                    }
-                }
-
-                addPieceToTile(tile, row, col);
+                setupTileAppearance(tile, boardTile);
                 
                 tiles[row][col] = tile;
                 boardPanel.add(tile);
@@ -144,24 +115,41 @@ public class BoardView {
         }
     }
 
-    private void addPieceToTile(JButton tile, int row, int col) {
-        for (Object[] piece : BLUE_PIECES) {
-            int pieceRow = (int)piece[1];
-            int pieceCol = (int)piece[2];
-            if (pieceRow == row && pieceCol == col) {
-                String pieceName = (String)piece[0];
-                tile.setIcon(loadScaledIcon("b_" + pieceName.toLowerCase() + ".png"));
-                return;
+    private void setupTileAppearance(JButton tile, Tile boardTile) {
+        // reset default tile
+        tile.setBackground(new Color(200, 200, 200));
+        tile.setIcon(null);
+
+        // setup special tiles
+        if (boardTile instanceof Lake) {
+            tile.setBackground(new Color(165, 206, 230));
+        } else if (boardTile instanceof Trap) {
+            Trap trap = (Trap) boardTile;
+            String owner = trap.getOwner();
+            if (owner != null) {
+                if (!boardTile.isOccupied()) {
+                    tile.setIcon(loadScaledIcon("trap.png"));
+                }
+            }
+        } else if (boardTile instanceof HomeBase) {
+            HomeBase home = (HomeBase) boardTile;
+            String owner = home.getOwner();
+            if (owner != null && !boardTile.isOccupied()) {
+                String prefix = owner.equals("Blue") ? "b_" : "g_";
+                tile.setIcon(loadScaledIcon(prefix + "homebase.png"));
             }
         }
-        
-        for (Object[] piece : GREEN_PIECES) {
-            int pieceRow = (int)piece[1];
-            int pieceCol = (int)piece[2];
-            if (pieceRow == row && pieceCol == col) {
-                String pieceName = (String)piece[0];
-                tile.setIcon(loadScaledIcon("g_" + pieceName.toLowerCase() + ".png"));
-                return;
+
+        // put piece on tile
+        if (boardTile.isOccupied()) {
+            Piece piece = boardTile.getCurrPiece();
+            if (piece != null) {
+                String pieceName = piece.getClass().getSimpleName();
+                String owner = piece.getOwner();
+                if (owner != null) {
+                    String prefix = owner.equals("Blue") ? "b_" : "g_";
+                    tile.setIcon(loadScaledIcon(prefix + pieceName.toLowerCase() + ".png"));
+                }
             }
         }
     }
@@ -172,13 +160,43 @@ public class BoardView {
         return new ImageIcon(image);
     }
 
-    // MOVE TO CONTROLLER
+    public void updateBoard() {
+        for (int row = 0; row < board.getRows(); row++) {
+            for (int col = 0; col < board.getCols(); col++) {
+                JButton tile = tiles[row][col];
+                Tile boardTile = board.getTile(row, col);
+                
+                setupTileAppearance(tile, boardTile);
+            }
+        }
+        boardPanel.revalidate();
+        boardPanel.repaint();
+    }
+
+    public void highlightTile(int row, int col, Color color) {
+        if (row >= 0 && row < tiles.length && col >= 0 && col < tiles[0].length) {
+            tiles[row][col].setBorder(BorderFactory.createLineBorder(color, 3));
+        }
+    }
+
+    public void clearHighlights() {
+        for (JButton[] row : tiles) {
+            for (JButton tile : row) {
+                tile.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            }
+        }
+    }
+
     public void updateTurn(String player) {
         turnLabel.setText(player + "'s Turn");
     }
 
     public void updateEvent(String message) {
         eventLabel.setText(message);
+    }
+
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(displayFrame, message);
     }
 
     public void setVisible(boolean visible) {

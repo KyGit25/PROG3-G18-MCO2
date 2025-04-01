@@ -52,10 +52,25 @@ public class Board {
         // Set home bases
         tiles[BLUE_HOME[0]][BLUE_HOME[1]] = new HomeBase(BLUE_HOME[0], BLUE_HOME[1], "Blue");
         tiles[GREEN_HOME[0]][GREEN_HOME[1]] = new HomeBase(GREEN_HOME[0], GREEN_HOME[1], "Green");
+
+        // Store the tile types
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                Tile tile = tiles[row][col];
+                if (tile instanceof Trap) {
+                    ((Trap) tile).setType("Trap");
+                } else if (tile instanceof HomeBase) {
+                    ((HomeBase) tile).setType("HomeBase");
+                } else if (tile instanceof Lake) {
+                    tile.setType("Lake");
+                } else {
+                    tile.setType("Land");
+                }
+            }
+        }
     }
 
     public void render() {
-        // Render the board (implementation depends on view)
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 tiles[row][col].render();
