@@ -4,15 +4,32 @@ import model.tiles.*;
 
 public class Elephant extends Piece {
 
+/**
+ * Constructs an Elephant piece.
+ *
+ * @param pos Initial tile.
+ * @param owner Player who owns the Elephant.
+ */
     public Elephant(Tile pos, String owner) {
         super(pos, owner);
     }
 
+/**
+ * Gets Elephant's strength.
+ *
+ * @return 8.
+ */
     @Override
     public int getStrength() {
         return 8;
     }
 
+/**
+ * Checks if the Elephant can capture a target piece.
+ *
+ * @param target The piece to be captured.
+ * @return true if allowed; false otherwise.
+ */
     @Override
     public boolean canCapture(Piece target) {
         if (target == null || target.getOwner().equals(this.owner)) return false;
@@ -29,6 +46,12 @@ public class Elephant extends Piece {
         return this.getStrength() >= target.getStrength();
     }
 
+/**
+ * Checks if the Elephant can move to the given tile.
+ *
+ * @param destination The destination tile.
+ * @return true if move is valid.
+ */
     @Override
     public boolean canMove(Tile destination) 
     {

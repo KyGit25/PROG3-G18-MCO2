@@ -5,15 +5,36 @@ import model.interfaces.Swimming;
 
 public class Rat extends Piece implements Swimming {
 
+/**
+ * Constructs a Rat with position and owner.
+ *
+ * @param pos Starting tile.
+ * @param owner Owner of the Rat.
+ */
     public Rat(Tile pos, String owner) {
         super(pos, owner);
     }
 
+/**
+ * Returns the Rat's strength.
+ *
+ * @return 1
+ */
     @Override
     public int getStrength() {
         return 1;
     }
 
+/**
+ * Determines if the Rat can capture a target piece.
+ *
+ * Special rules:
+ * - Can capture other rats in lake.
+ * - Cannot capture elephants while in lake.
+ *
+ * @param target The piece to capture.
+ * @return true if valid capture.
+ */
     @Override
     public boolean canCapture(Piece target) {
         if (target == null || target.getOwner().equals(this.owner)) return false;
@@ -40,6 +61,12 @@ public class Rat extends Piece implements Swimming {
         return this.getStrength() >= target.getStrength();
     }
 
+/**
+ * Checks if the Rat can move to the given destination.
+ *
+ * @param destination Tile to move to.
+ * @return true if move is allowed.
+ */
     @Override
     public boolean canMove(Tile destination) 
     {
@@ -52,6 +79,12 @@ public class Rat extends Piece implements Swimming {
         return (dx + dy == 1);
     }
 
+/**
+ * Allows the Rat to swim into a lake tile.
+ *
+ * @param destination The target tile.
+ * @return destination if it's a lake, else null.
+ */
     @Override
     public Tile swim(Tile destination) {
         return (destination instanceof Lake) ? destination : null;
