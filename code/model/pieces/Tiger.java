@@ -88,8 +88,15 @@ public class Tiger extends Piece implements Leaping {
         int destCol = destination.getCol();
 
         // Horizontal leap
-        if (currRow == destRow && Math.abs(destCol - currCol) > 1) {
-            int dir = (destCol > currCol) ? 1 : -1;
+        if (currRow == destRow && Math.abs(destCol - currCol) > 1) 
+        {    
+            int dir;
+            if (destCol > currCol) {
+                dir = 1;
+            } else {
+                dir = -1;
+            }
+
             for (int c = currCol + dir; c != destCol; c += dir) {
                 Tile tile = Game.getBoard().getTile(currRow, c);
                 if (!(tile instanceof Lake) || 
@@ -101,8 +108,15 @@ public class Tiger extends Piece implements Leaping {
         }
 
         // Vertical leap
-        if (currCol == destCol && Math.abs(destRow - currRow) > 1) {
-            int dir = (destRow > currRow) ? 1 : -1;
+        if (currCol == destCol && Math.abs(destRow - currRow) > 1) 
+        {
+            int dir;
+            if (destRow > currRow) {
+                dir = 1;
+            } else {
+                dir = -1;
+            }
+
             for (int r = currRow + dir; r != destRow; r += dir) {
                 Tile tile = Game.getBoard().getTile(r, currCol);
                 if (!(tile instanceof Lake) || (tile.isOccupied() && tile.getCurrPiece() instanceof Rat)) {
