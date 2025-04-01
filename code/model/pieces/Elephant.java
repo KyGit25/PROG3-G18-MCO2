@@ -19,7 +19,7 @@ public class Elephant extends Piece {
 
         // Trap rule: if target is in trap, it can be captured by anyone
         if (target.getPosition() instanceof Trap &&
-            !((Trap) target.getPosition()).getOwner().equals(this.owner)) {
+            ((Trap) target.getPosition()).getOwner().equals(this.owner)) {
             return true;
         }
 

@@ -33,7 +33,7 @@ public class Rat extends Piece implements Swimming {
 
         // Trap exception: anyone can capture enemies on traps
         if (theirTile instanceof Trap &&
-            !((Trap) theirTile).getOwner().equals(this.owner)) {
+            ((Trap) theirTile).getOwner().equals(this.owner)) {
             return true;
         }
 

@@ -158,7 +158,10 @@ public class Game {
                 // Attacker dies
                 piece.setCaptured(true);
                 currentPos.setCurrPiece(null);
-                return false;
+                // destination.setCurrPiece(null);
+                // target.setPosition(currentPos);
+                // currentPos.setCurrPiece(target);
+                return true;
             }
         }
 

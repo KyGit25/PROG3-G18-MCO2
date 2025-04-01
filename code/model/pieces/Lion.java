@@ -20,7 +20,7 @@ public class Lion extends Piece implements Leaping {
         if (target == null || target.getOwner().equals(this.owner)) return false;
 
         if (target.getPosition() instanceof Trap &&
-            !((Trap) target.getPosition()).getOwner().equals(this.owner)) {
+            ((Trap) target.getPosition()).getOwner().equals(this.owner)) {
             return true;
         }
 
