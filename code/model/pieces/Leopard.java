@@ -4,8 +4,8 @@ import model.tiles.Tile;
 import model.tiles.HomeBase;
 
 public class Leopard extends Piece {
-    public Leopard(Tile pos) {
-        super(pos);
+    public Leopard(Tile pos, String owner) {
+        super(pos, owner);
     }
 
     @Override
