@@ -126,23 +126,16 @@ public class GameView {
 
     public void disableAllButtons() {
         for (JButton button : pieceButtons) {
-            disableButton(button);
+            button.setEnabled(false);
         }
     }
 
     public void disablePieceButton(String piece) {
         for (JButton button : pieceButtons) {
-            if (piece.equals(button.getClientProperty("piece"))) {
-                disableButton(button);
+            if (button.getText().equals(piece)) {
+                button.setEnabled(false);
                 break;
             }
-        }
-    }
-
-    private void disableButton(JButton button) {
-        if (button.isEnabled()) {
-            button.setEnabled(false);
-            button.setDisabledIcon(button.getIcon());
         }
     }
 
