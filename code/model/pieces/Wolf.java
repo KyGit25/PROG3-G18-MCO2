@@ -4,8 +4,8 @@ import model.tiles.Tile;
 import model.tiles.HomeBase;
 
 public class Wolf extends Piece {
-    public Wolf(Tile pos) {
-        super(pos);
+    public Wolf(Tile pos, String owner) {
+        super(pos, owner);
     }
 
     @Override
