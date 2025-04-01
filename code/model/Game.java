@@ -4,6 +4,8 @@ import model.Board;
 import model.pieces.*;
 import model.tiles.Tile;
 import model.tiles.HomeBase;
+import model.tiles.Trap;
+import model.tiles.Lake;
 import model.interfaces.Leaping;
 import model.interfaces.Swimming;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Game {
-    private Board board;
+    private static Board board;
     private Player player1;
     private Player player2;
     private Player currentPlayer;
@@ -22,7 +24,7 @@ public class Game {
     private static final int[] GREEN_HOME = {3, 8};
 
     public Game() {
-        this.board = new Board();
+        board = new Board();
         this.player1 = new Player("Blue");
         this.player2 = new Player("Green");
         this.gameState = new GameState();
@@ -30,28 +32,55 @@ public class Game {
     }
 
     public void initializePieces() {
-        // Initialize blue pieces
-        player1.addPiece(new Elephant(board.getTile(0, 0)));
-        player1.addPiece(new Lion(board.getTile(0, 6)));
-        player1.addPiece(new Tiger(board.getTile(6, 0)));
-        player1.addPiece(new Leopard(board.getTile(6, 6)));
-        player1.addPiece(new Wolf(board.getTile(1, 1)));
-        player1.addPiece(new Dog(board.getTile(5, 1)));
-        player1.addPiece(new Cat(board.getTile(1, 5)));
-        player1.addPiece(new Rat(board.getTile(5, 5)));
+        // Blue pieces based on the provided positions
+        Tiger blueTiger = new Tiger(board.getTile(0, 0), "Blue");
+        player1.addPiece(blueTiger);
+        
+        Cat blueCat = new Cat(board.getTile(1, 1), "Blue");
+        player1.addPiece(blueCat);
+        
+        Elephant blueElephant = new Elephant(board.getTile(0, 2), "Blue");
+        player1.addPiece(blueElephant);
+        
+        Wolf blueWolf = new Wolf(board.getTile(2, 2), "Blue");
+        player1.addPiece(blueWolf);
+        
+        Leopard blueLeopard = new Leopard(board.getTile(4, 2), "Blue");
+        player1.addPiece(blueLeopard);
+        
+        Dog blueDog = new Dog(board.getTile(5, 1), "Blue");
+        player1.addPiece(blueDog);
+        
+        Lion blueLion = new Lion(board.getTile(6, 0), "Blue");
+        player1.addPiece(blueLion);
+        
+        Rat blueRat = new Rat(board.getTile(6, 2), "Blue");
+        player1.addPiece(blueRat);
 
-        // Initialize green pieces (mirrored positions)
-        player2.addPiece(new Elephant(board.getTile(6, 8)));
-        player2.addPiece(new Lion(board.getTile(6, 2)));
-        player2.addPiece(new Tiger(board.getTile(0, 8)));
-        player2.addPiece(new Leopard(board.getTile(0, 2)));
-        player2.addPiece(new Wolf(board.getTile(5, 7)));
-        player2.addPiece(new Dog(board.getTile(1, 7)));
-        player2.addPiece(new Cat(board.getTile(5, 3)));
-        player2.addPiece(new Rat(board.getTile(1, 3)));
-
-        // Randomly choose starting player
-        currentPlayer = new Random().nextBoolean() ? player1 : player2;
+        // Green pieces based on the provided positions
+        Tiger greenTiger = new Tiger(board.getTile(6, 8), "Green");
+        player2.addPiece(greenTiger);
+        
+        Cat greenCat = new Cat(board.getTile(5, 7), "Green");
+        player2.addPiece(greenCat);
+        
+        Elephant greenElephant = new Elephant(board.getTile(6, 6), "Green");
+        player2.addPiece(greenElephant);
+        
+        Wolf greenWolf = new Wolf(board.getTile(4, 6), "Green");
+        player2.addPiece(greenWolf);
+        
+        Leopard greenLeopard = new Leopard(board.getTile(2, 6), "Green");
+        player2.addPiece(greenLeopard);
+        
+        Dog greenDog = new Dog(board.getTile(1, 7), "Green");
+        player2.addPiece(greenDog);
+        
+        Lion greenLion = new Lion(board.getTile(0, 8), "Green");
+        player2.addPiece(greenLion);
+        
+        Rat greenRat = new Rat(board.getTile(0, 6), "Green");
+        player2.addPiece(greenRat);
     }
 
     public List<String> getShuffledPieces() {
@@ -110,49 +139,41 @@ public class Game {
     public boolean movePiece(Piece piece, Tile destination) {
         if (piece == null || destination == null) return false;
         
+        // Get current position
+        Tile currentPos = piece.getPosition();
+        
         // Check if move is valid
-        if (piece.canMove(destination)) {
-            // Handle special movement (leaping/swimming)
-            if (piece instanceof Leaping && needsLeaping(piece.getPosition(), destination)) {
-                if (((Leaping)piece).leap(destination) == null) return false;
-            } else if (piece instanceof Swimming && ((Swimming)piece).swim(destination) == null) {
+        if (!piece.canMove(destination)) {
+            return false;
+        }
+
+        // Handle capture
+        if (destination.isOccupied()) {
+            Piece target = destination.getCurrPiece();
+            
+            if (piece.canCapture(target)) {
+                target.setCaptured(true);
+                destination.setCurrPiece(null);
+            } else {
+                // Attacker dies
+                piece.setCaptured(true);
+                currentPos.setCurrPiece(null);
                 return false;
             }
-
-            // Handle capture
-            if (destination.isOccupied()) {
-                Piece opponent = destination.getCurrPiece();
-                if (piece.canCapture(opponent)) {
-                    opponent.setCaptured(true);
-                    destination.setCurrPiece(null);
-                } else {
-                    // Attacker dies
-                    piece.setCaptured(true);
-                    piece.getPosition().setCurrPiece(null);
-                    return false;
-                }
-            }
-
-            // Update positions
-            piece.getPosition().setCurrPiece(null);
-            destination.setCurrPiece(piece);
-            piece.setPosition(destination);
-
-            // Check win condition
-            if (checkWinCondition()) {
-                gameState.setGameOver(true);
-                gameState.setWinner(currentPlayer);
-            }
-
-            return true;
         }
-        return false;
-    }
 
-    private boolean needsLeaping(Tile current, Tile destination) {
-        // Check if path between current and destination is all lakes
-        // Implementation depends on exact path checking
-        return false;
+        // Update positions
+        currentPos.setCurrPiece(null);
+        destination.setCurrPiece(piece);
+        piece.setPosition(destination);
+
+        // Check win condition
+        if (checkWinCondition()) {
+            gameState.setGameOver(true);
+            gameState.setWinner(currentPlayer);
+        }
+
+        return true;
     }
 
     private boolean checkWinCondition() {
@@ -165,7 +186,7 @@ public class Game {
                opponentHome.getCurrPiece().getOwner().equals(currentPlayer.getName());
     }
 
-    public Board getBoard() {
+    public static Board getBoard() {
         return board;
     }
 
